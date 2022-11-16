@@ -1,11 +1,11 @@
 import express, { json } from 'express';
-import path, { join }  from 'path';
+import path, { join } from 'path';
 import { fileURLToPath } from 'url';
 import session from 'express-session';
 import database from './database/database.cjs';
 import 'dotenv/config'
 const app = express();
-
+import cors from 'cors'
 // Routes
 import api from './api.js';
 
@@ -20,13 +20,14 @@ app.use(express.static(join(__dirname, 'build')));
 // Middlewares
 // Parse JSON bodies (as sent by API clients)
 app.use(json());
+app.use(cors());
 app.use(session({
     // eatontime (SHA256)
     secret: '2643db4fac36d614d06b066a1f62411c278ed09cb6804150384fc3fb0cbcc6fd',
     store: database.sessionStore,
     resave: false,
     saveUninitialized: false,
-    cookie:{
+    cookie: {
         maxAge: (1000 * 60 * 60 * 12)
     }
 }));
